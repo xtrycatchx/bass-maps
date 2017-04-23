@@ -1,0 +1,14 @@
+{
+  "name": "idinayale-maps",
+  "version": "1.0.0",
+  "description": "Map displays for data from BASS server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Paul Sydney Orozco <xtrycatchx@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
