@@ -1,32 +1,70 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Volunteer Maps</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
+
 <body>
     <div id='map'></div>
     <script>
         function initMap() {
-            const map = new google.maps.Map(document.getElementById('map'), {zoom: 6,center: {lat: 12.8797, lng: 121.7740}});
+            const map = new google.maps.Map(document.getElementById('map'), { zoom: 6, center: { lat: 12.8797, lng: 121.7740 } });
             $.ajax({
                 url: "REPLACE_ME",
                 method: "GET",
-                success: function(objects) {
+                success: function (objects) {
                     const locations = objects;
                     let markers = [];
-                    const scaledSize= new google.maps.Size(45, 45); 
-                    const origin= new google.maps.Point(0,0);
-                    const anchor=  new google.maps.Point(0, 0);
+                    const scaledSize = new google.maps.Size(45, 45);
+                    const origin = new google.maps.Point(0, 0);
+                    const anchor = new google.maps.Point(0, 0);
                     const smart = "images/smart.png";
                     const globe = "images/globe.png";
                     const others = "images/others.png";
                     const wifi = "images/wifi.png";
+
+                    const makeInfoWindowEvent = (map, label, bandwidth, signal, marker) => {
+                        let contentString = '';
+                        if (signal) {
+                            if (~label.toLowerCase().indexOf("smart")) {
+                                contentString = contentString + '<div style="color:red">';
+                            } else if (~label.toLowerCase().indexOf("globe")) {
+                                contentString = contentString + '<div style="color:blue">';
+                            } else {
+                                contentString = contentString + '<div>';
+                            }
+                            contentString = contentString + '<h4>' + label + '</h4>';
+                            contentString = contentString + '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>';
+                            contentString = contentString + '<p><strong>Signal : </strong>' + signal + '</p>';
+                            contentString = contentString + '</div></div>';
+                        } else {
+                            contentString = '<div>' +
+                                '<h4>' + label + '</h4>' +
+                                '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>' +
+                                '</div>';
+                        }
+                        
+                        const infowindow = new google.maps.InfoWindow({
+                            content: contentString,
+                            maxWidth: 350
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function () {
+                            infowindow.open(map, marker);
+                        });
+                        
+                        google.maps.event.addListener(map, 'click', function () {
+                            infowindow.close();
+                        });
+                    }
+
                     for (let i = 0; i < locations.length; i++) {
                         let imgUrl = others;
-                        if(locations[i].signal) {
+                        if (locations[i].signal) {
                             if (~locations[i].label.toLowerCase().indexOf("smart")) {
                                 imgUrl = smart;
                             } else if (~locations[i].label.toLowerCase().indexOf("globe")) {
@@ -35,7 +73,7 @@
                                 imgUrl = others;
                             }
                         } else {
-                            imgUrl =  wifi;
+                            imgUrl = wifi;
                         }
                         const icon = {
                             url: imgUrl,
@@ -43,55 +81,19 @@
                             origin: origin,
                             anchor: anchor
                         };
-                        
+
                         const marker = new google.maps.Marker({
                             position: new google.maps.LatLng(locations[i].loc.lat, locations[i].loc.lng),
                             map: map,
                             //label : locations[i].bandwidth,
                             icon: icon,
                         });
-                        makeInfoWindowEvent(map, locations[i].label,locations[i].bandwidth,locations[i].signal, marker);
+                        makeInfoWindowEvent(map, locations[i].label, locations[i].bandwidth, locations[i].signal, marker);
                         markers.push(marker);
                     }
 
-                    function makeInfoWindowEvent(map, label, bandwidth, signal,  marker) {
-                        let contentString = '';
-                        if(signal) {
-                            if (~label.toLowerCase().indexOf("smart")) {
-                                contentString = contentString + '<div style="color:red">';
-                            } else if (~label.toLowerCase().indexOf("globe")) {
-                                contentString = contentString + '<div style="color:blue">';
-                            } else {
-                                contentString = contentString + '<div>';
-                            }
-                                contentString = contentString + '<h4>'+ label +'</h4>';
-                                contentString = contentString + '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>';
-                                contentString = contentString + '<p><strong>Signal : </strong>' + signal + '</p>';
-                                contentString = contentString + '</div></div>';
-                            } else {
-                                contentString ='<div>'+
-                                    '<h4>'+ label +'</h4>' +
-                                    '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>' +
-                                    '</div>';
-                            }
-                            //var infowindow = new google.maps.InfoWindow();
-                            const infowindow = new google.maps.InfoWindow({
-                                content: contentString,
-                                maxWidth: 350
-                            });
-                            
-                            google.maps.event.addListener(marker, 'click', function() {
-                                infowindow.open(map,marker);
-                            });
 
-                            // Event that closes the Info Window with a click on the map
-                            google.maps.event.addListener(map, 'click', function() {
-                                infowindow.close();
-                            });
-
-                        
-                    }
-                    const markerCluster = new MarkerClusterer(map, markers, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+                    const markerCluster = new MarkerClusterer(map, markers, { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
                 },
             });
         }
@@ -99,4 +101,5 @@
     <script src='https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js'></script>
     <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwc3ZG5Qh0r3maIQEfm2t4TRjqRjAT9C8&callback=initMap'></script>
 </body>
+
 </html>
