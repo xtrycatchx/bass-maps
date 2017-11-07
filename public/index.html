@@ -10,22 +10,22 @@
     <div id='map'></div>
     <script>
         function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {zoom: 6,center: {lat: 12.8797, lng: 121.7740}});
+            const map = new google.maps.Map(document.getElementById('map'), {zoom: 6,center: {lat: 12.8797, lng: 121.7740}});
             $.ajax({
                 url: "REPLACE_ME",
                 method: "GET",
                 success: function(objects) {
-                    var locations = objects;
-                    var markers = [];
-                    var scaledSize= new google.maps.Size(45, 45); 
-                    var origin= new google.maps.Point(0,0);
-                    var anchor=  new google.maps.Point(0, 0);
-                    var smart = "images/smart.png";
-                    var globe = "images/globe.png";
-                    var others = "images/others.png";
-                    var wifi = "images/wifi.png";
-                    for (var i = 0; i < locations.length; i++) {
-                        var imgUrl = others;
+                    const locations = objects;
+                    let markers = [];
+                    const scaledSize= new google.maps.Size(45, 45); 
+                    const origin= new google.maps.Point(0,0);
+                    const anchor=  new google.maps.Point(0, 0);
+                    const smart = "images/smart.png";
+                    const globe = "images/globe.png";
+                    const others = "images/others.png";
+                    const wifi = "images/wifi.png";
+                    for (let i = 0; i < locations.length; i++) {
+                        let imgUrl = others;
                         if(locations[i].signal) {
                             if (~locations[i].label.toLowerCase().indexOf("smart")) {
                                 imgUrl = smart;
@@ -37,14 +37,14 @@
                         } else {
                             imgUrl =  wifi;
                         }
-                        var icon = {
+                        const icon = {
                             url: imgUrl,
                             scaledSize: scaledSize,
                             origin: origin,
                             anchor: anchor
                         };
                         
-                        var marker = new google.maps.Marker({
+                        const marker = new google.maps.Marker({
                             position: new google.maps.LatLng(locations[i].loc.lat, locations[i].loc.lng),
                             map: map,
                             //label : locations[i].bandwidth,
@@ -55,7 +55,7 @@
                     }
 
                     function makeInfoWindowEvent(map, label, bandwidth, signal,  marker) {
-                        var contentString = '';
+                        let contentString = '';
                         if(signal) {
                             if (~label.toLowerCase().indexOf("smart")) {
                                 contentString = contentString + '<div style="color:red">';
@@ -75,7 +75,7 @@
                                     '</div>';
                             }
                             //var infowindow = new google.maps.InfoWindow();
-                            var infowindow = new google.maps.InfoWindow({
+                            const infowindow = new google.maps.InfoWindow({
                                 content: contentString,
                                 maxWidth: 350
                             });
@@ -91,7 +91,7 @@
 
                         
                     }
-                    var markerCluster = new MarkerClusterer(map, markers, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+                    const markerCluster = new MarkerClusterer(map, markers, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
                 },
             });
         }
