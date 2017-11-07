@@ -53,11 +53,11 @@
                             maxWidth: 350
                         });
 
-                        google.maps.event.addListener(marker, 'click', function () {
+                        google.maps.event.addListener(marker, 'click', () => {
                             infowindow.open(map, marker);
                         });
                         
-                        google.maps.event.addListener(map, 'click', function () {
+                        google.maps.event.addListener(map, 'click', () => {
                             infowindow.close();
                         });
                     }
