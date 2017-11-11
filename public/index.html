@@ -14,7 +14,7 @@
         function initMap() {
             const map = new google.maps.Map(document.getElementById('map'), { zoom: 6, center: { lat: 12.8797, lng: 121.7740 } });
             $.ajax({
-                url: "REPLACE_ME",
+                url: "https://bass.bnshosting.net/v2/api/locationpoints",
                 method: "GET",
                 success: function (objects) {
                     const locations = objects;
@@ -47,7 +47,7 @@
                                 '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>' +
                                 '</div>';
                         }
-                        
+
                         const infowindow = new google.maps.InfoWindow({
                             content: contentString,
                             maxWidth: 350
@@ -56,7 +56,7 @@
                         google.maps.event.addListener(marker, 'click', () => {
                             infowindow.open(map, marker);
                         });
-                        
+
                         google.maps.event.addListener(map, 'click', () => {
                             infowindow.close();
                         });
