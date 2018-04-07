@@ -26,16 +26,17 @@
                     const others = "images/others.png";
                     const wifi = "images/wifi.png";
 
-                    const makeInfoWindowEvent = (map, label, bandwidth, signal, marker) => {
+                    const getDivHeader = (label) => 
+                        ~label.indexOf("smart")
+                            ? '<div style="color:red">' 
+                            : ~label.indexOf("globe") 
+                                ? '<div style="color:blue">' 
+                                : 'div'
+
+                    const divDisplay = (label, bandwidth, signal) => {
                         let contentString = '';
                         if (signal) {
-                            if (~label.toLowerCase().indexOf("smart")) {
-                                contentString = '<div style="color:red">';
-                            } else if (~label.toLowerCase().indexOf("globe")) {
-                                contentString = '<div style="color:blue">';
-                            } else {
-                                contentString = '<div>';
-                            }
+                            contentString = getDivHeader(label.toLowerCase())
                             contentString = `${contentString} <h4> ${label} </h4>
                                 <p><strong>Bandwidth : </strong> ${bandwidth} </p>
                                 <p><strong>Signal : </strong> ${signal} </p>
@@ -47,7 +48,12 @@
                                 <p><strong>Bandwidth : </strong> ${bandwidth} </p>
                                 </div>`;
                         }
+                        return contentString;
 
+                    }
+
+                    const makeInfoWindowEvent = (map, label, bandwidth, signal, marker) => {
+                        let contentString = divDisplay(label, bandwidth, signal);
                         const infowindow = new google.maps.InfoWindow({
                             content: contentString,
                             maxWidth: 350
@@ -62,21 +68,24 @@
                         });
                     }
 
-                    for (let i = 0; i < locations.length; i++) {
-                        let imgUrl = others;
-                        if (locations[i].signal) {
-                            if (~locations[i].label.toLowerCase().indexOf("smart")) {
-                                imgUrl = smart;
-                            } else if (~locations[i].label.toLowerCase().indexOf("globe")) {
-                                imgUrl = globe;
+                    const getImage = location => {
+                        if (location.signal) {
+                            const label = location.label.toLowerCase()
+                            if (label.indexOf("smart")) {
+                                return smart;
+                            } else if (label.indexOf("globe")) {
+                                return globe;
                             } else {
-                                imgUrl = others;
+                                return others;
                             }
                         } else {
-                            imgUrl = wifi;
+                            return wifi;
                         }
+                    }
+
+                    for (let i = 0; i < locations.length; i++) {
                         const icon = {
-                            url: imgUrl,
+                            url: getImage(locations[i]),
                             scaledSize: scaledSize,
                             origin: origin,
                             anchor: anchor
