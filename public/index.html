@@ -30,16 +30,17 @@
                         let contentString = '';
                         if (signal) {
                             if (~label.toLowerCase().indexOf("smart")) {
-                                contentString = contentString + '<div style="color:red">';
+                                contentString = '<div style="color:red">';
                             } else if (~label.toLowerCase().indexOf("globe")) {
-                                contentString = contentString + '<div style="color:blue">';
+                                contentString = '<div style="color:blue">';
                             } else {
-                                contentString = contentString + '<div>';
+                                contentString = '<div>';
                             }
-                            contentString = contentString + '<h4>' + label + '</h4>';
-                            contentString = contentString + '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>';
-                            contentString = contentString + '<p><strong>Signal : </strong>' + signal + '</p>';
-                            contentString = contentString + '</div></div>';
+                            contentString = `${contentString} <h4> ${label} </h4>
+                                <p><strong>Bandwidth : </strong> ${bandwidth} </p>
+                                <p><strong>Signal : </strong> ${signal} </p>
+                                </div>
+                                </div>`;
                         } else {
                             contentString = `<div>
                                 <h4> ${label} </h4>
