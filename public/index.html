@@ -16,8 +16,7 @@
             $.ajax({
                 url: "https://bass.bnshosting.net/v2/api/locationpoints",
                 method: "GET",
-                success: function (objects) {
-                    const locations = objects;
+                success: locations => {
                     let markers = [];
                     const scaledSize = new google.maps.Size(45, 45);
                     const origin = new google.maps.Point(0, 0);
@@ -42,10 +41,10 @@
                             contentString = contentString + '<p><strong>Signal : </strong>' + signal + '</p>';
                             contentString = contentString + '</div></div>';
                         } else {
-                            contentString = '<div>' +
-                                '<h4>' + label + '</h4>' +
-                                '<p><strong>Bandwidth : </strong>' + bandwidth + '</p>' +
-                                '</div>';
+                            contentString = `<div>
+                                <h4> ${label} </h4>
+                                <p><strong>Bandwidth : </strong> ${bandwidth} </p>
+                                </div>`;
                         }
 
                         const infowindow = new google.maps.InfoWindow({
